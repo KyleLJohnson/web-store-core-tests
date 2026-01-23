@@ -1,1 +1,22 @@
+{
+  "$schemaVersion": "1.1",
+  "defaults": {
+    "repo": "your-gh-org/app-core-tests",
+    "branch": "main",
+    "runner": "pytest",
+    "resultsFormat": "junit",
+    "testResultsGlob": "reports/junit/*.xml",
+    "workingDirectory": "./"
+  },
+  "mappings": [
+    {
+      "testCaseId": 5,
+      "path": "tests/e2e/test_checkout_flow.py::test_guest_checkout",
+      "framework": "pytest",
+      "tags": ["smoke","e2e"],
+      "retry": 0,
+      "timeoutSeconds": 1200
+    }
+  ]
+}
 
