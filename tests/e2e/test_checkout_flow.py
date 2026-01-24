@@ -2,7 +2,7 @@ import pytest
 from playwright.sync_api import Page, expect
 
 
-def test_browse_msn(page: Page):
+def test_guest_checkout(page: Page):
     """Test browsing to msn.com."""
     page.goto("https://www.msn.com")
     
