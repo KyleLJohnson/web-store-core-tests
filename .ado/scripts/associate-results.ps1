@@ -6,17 +6,18 @@ param(
   [Parameter(Mandatory=$true)][string]$MappingFile
 )
 
-# Minimal scopes: Test (Read & Write)
-$pat = $env:ADO_PAT
-if ([string]::IsNullOrWhiteSpace($pat)) {
-  Write-Error "ADO_PAT env var is missing."
-  exit 1
+
+$token = $env:SYSTEM_ACCESSTOKEN
+if ([string]::IsNullOrWhiteSpace($token)) {
+    Write-Error "System.AccessToken is not available. Make sure persistCredentials: true is set."
+    exit 1
 }
 
-$authHeader = @{
-  Authorization = "Basic " + [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$pat"))
-  "Content-Type" = "application/json"
+$authHeaders = @{
+    Authorization = "Bearer $token"
+    "Content-Type" = "application/json"
 }
+
 
 # 1) Load mapping: testCaseId -> path
 $map = (Get-Content $MappingFile -Raw | ConvertFrom-Json).mappings
