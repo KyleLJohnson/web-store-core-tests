@@ -26,7 +26,7 @@ foreach ($m in $map) { $pathToCase[$m.path] = [int]$m.testCaseId }
 
 # 2) Find the latest Test Run for this build (created by PublishTestResults@2)
 $runUrl = "$Organization$Project/_apis/test/runs?buildIds=$BuildId&api-version=7.1-preview.3"
-$runs = Invoke-RestMethod -Headers $authHeader -Uri $runUrl -Method GET
+$runs = Invoke-RestMethod -Headers $authHeaders -Uri $runUrl -Method GET
 if (-not $runs.value -or $runs.count -eq 0) {
   Write-Error "No test runs found for build $BuildId"
   exit 2
@@ -37,7 +37,7 @@ Write-Host "Using Test Run Id: $runId"
 
 # 3) Get results in the run
 $resultsUrl = "$Organization$Project/_apis/test/runs/$runId/results?api-version=7.1-preview.6"
-$results = Invoke-RestMethod -Headers $authHeader -Uri $resultsUrl -Method GET
+$results = Invoke-RestMethod -Headers $authHeaders -Uri $resultsUrl -Method GET
 if (-not $results.value) {
   Write-Error "No test results in run $runId"
   exit 3
@@ -78,6 +78,6 @@ if ($patchBody.Count -eq 0) {
 # 5) Patch results with testCase linkage
 $bodyJson = @{ results = $patchBody } | ConvertTo-Json -Depth 6
 $patchUrl = "$Organization$Project/_apis/test/runs/$runId/results?api-version=7.1-preview.6"
-Invoke-RestMethod -Headers $authHeader -Uri $patchUrl -Method Patch -Body $bodyJson
+Invoke-RestMethod -Headers $authHeaders -Uri $patchUrl -Method Patch -Body $bodyJson
 
 Write-Host "Associated $($patchBody.Count) result(s) to ADO Test Cases."
